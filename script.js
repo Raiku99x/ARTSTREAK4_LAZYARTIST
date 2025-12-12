@@ -40,7 +40,7 @@ const WEEKLY_TITLES = [
     { id: 15, name: "Masterpiece Keeper", requirement: 160, tier: "epic" },
     { id: 16, name: "Easel Emperor", requirement: 180, tier: "epic" },
     { id: 17, name: "Grandmaster of Mediums", requirement: 200, tier: "legendary" },
-    { id: 18, name: "The Four-Year Evergreen Artist", requirement: 208, tier: "legendary" }
+    { id: 18, name: "The Four-Year Evergreen Artist", requirement: 208, tier: "mythic" }
 ];
 
 // State
@@ -57,7 +57,9 @@ let state = {
     uploads: [],
     selectedTitle: null,
     dailyUploadsToday: 0,
-    weeklyUploadsThisWeek: 0
+    weeklyUploadsThisWeek: 0,
+    currentMonthView: new Date(),
+    currentYearView: new Date().getFullYear()
 };
 
 // Initialize
@@ -66,7 +68,8 @@ document.addEventListener('DOMContentLoaded', () => {
     initializeElements();
     updateUI();
     startTimers();
-    renderCalendar();
+    renderDailyCalendar();
+    renderWeeklyCalendar();
     renderGallery();
 });
 
@@ -110,6 +113,55 @@ function initializeElements() {
         });
     });
 
+    // Calendar tab switching
+    document.querySelectorAll('.calendar-tab-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            document.querySelectorAll('.calendar-tab-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            
+            const calendarType = btn.dataset.calendar;
+            document.getElementById('dailyCalendarView').classList.toggle('hidden', calendarType !== 'daily');
+            document.getElementById('weeklyCalendarView').classList.toggle('hidden', calendarType !== 'weekly');
+        });
+    });
+
+    // Calendar navigation
+    document.getElementById('prevMonth').addEventListener('click', () => {
+        state.currentMonthView.setMonth(state.currentMonthView.getMonth() - 1);
+        renderDailyCalendar();
+        saveState();
+    });
+
+    document.getElementById('nextMonth').addEventListener('click', () => {
+        const today = new Date();
+        const nextMonth = new Date(state.currentMonthView);
+        nextMonth.setMonth(nextMonth.getMonth() + 1);
+        
+        // Don't allow going beyond current month
+        if (nextMonth <= today) {
+            state.currentMonthView = nextMonth;
+            renderDailyCalendar();
+            saveState();
+        }
+    });
+
+    document.getElementById('prevYear').addEventListener('click', () => {
+        state.currentYearView--;
+        renderWeeklyCalendar();
+        saveState();
+    });
+
+    document.getElementById('nextYear').addEventListener('click', () => {
+        const currentYear = new Date().getFullYear();
+        
+        // Don't allow going beyond current year
+        if (state.currentYearView < currentYear) {
+            state.currentYearView++;
+            renderWeeklyCalendar();
+            saveState();
+        }
+    });
+
     usernameInput.value = state.username;
     
     // Load avatar if exists
@@ -140,7 +192,7 @@ function handleFileUpload(e) {
 
         state.uploads.unshift(upload);
         state.dailyUploadsToday++;
-        state.weeklyUploadsThisWeek = Math.min(state.weeklyUploadsThisWeek + 1, 7);
+        state.weeklyUploadsThisWeek = Math.min(state.weeklyUploadsThisWeek + 1, 21);
 
         // Update streaks (only first upload of the day counts for daily streak)
         if (state.dailyUploadsToday === 1) {
@@ -154,7 +206,8 @@ function handleFileUpload(e) {
 
         saveState();
         updateUI();
-        renderCalendar();
+        renderDailyCalendar();
+        renderWeeklyCalendar();
         renderGallery();
         
         const uploadNum = state.dailyUploadsToday === 1 ? 
@@ -328,7 +381,7 @@ function updateUI() {
 
     // Update upload counts
     document.getElementById('dailyUploadCount').textContent = state.dailyUploadsToday;
-    document.getElementById('weeklyUploadCount').textContent = Math.min(state.weeklyUploadsThisWeek, 7);
+    document.getElementById('weeklyUploadCount').textContent = Math.min(state.weeklyUploadsThisWeek, 21);
 
     // Update streak status
     updateStreakStatus();
@@ -379,7 +432,7 @@ function updateTimers() {
     const weeklyTime = getTimeUntilWeekEnd();
 
     dailyTimer.textContent = formatTime(dailyTime);
-    weeklyTimer.textContent = formatTime(weeklyTime);
+    weeklyTimer.textContent = formatWeeklyTime(weeklyTime);
 
     // Add warning class if under 5 hours
     if (dailyTime < 5 * 60 * 60 * 1000) {
@@ -420,16 +473,39 @@ function formatTime(ms) {
     return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
 }
 
-function renderCalendar() {
-    const calendarGrid = document.getElementById('calendarGrid');
+function formatWeeklyTime(ms) {
+    const days = Math.floor(ms / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((ms % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const minutes = Math.floor((ms % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((ms % (1000 * 60)) / 1000);
+    return `${days}:${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+}
+
+function renderDailyCalendar() {
+    const calendarGrid = document.getElementById('dailyCalendarGrid');
+    const titleEl = document.getElementById('dailyCalendarTitle');
     calendarGrid.innerHTML = '';
 
-    const today = new Date();
-    const daysToShow = 84; // 12 weeks
+    const viewDate = new Date(state.currentMonthView);
+    const year = viewDate.getFullYear();
+    const month = viewDate.getMonth();
+    
+    // Update title
+    const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 
+                        'July', 'August', 'September', 'October', 'November', 'December'];
+    titleEl.textContent = `${monthNames[month]} ${year}`;
 
-    for (let i = daysToShow - 1; i >= 0; i--) {
-        const date = new Date(today);
-        date.setDate(today.getDate() - i);
+    // Get first and last day of the month
+    const firstDay = new Date(year, month, 1);
+    const lastDay = new Date(year, month + 1, 0);
+    const daysInMonth = lastDay.getDate();
+
+    const today = new Date();
+    const todayStr = today.toDateString();
+
+    // Render all days in the month
+    for (let day = 1; day <= daysInMonth; day++) {
+        const date = new Date(year, month, day);
         const dateStr = date.toDateString();
 
         const dayUploads = state.uploads.filter(u => u.date === dateStr).length;
@@ -441,13 +517,80 @@ function renderCalendar() {
             dayEl.classList.add(`has-upload-${Math.min(dayUploads, 3)}`);
         }
         
-        if (dateStr === today.toDateString()) {
+        if (dateStr === todayStr) {
             dayEl.classList.add('today');
         }
 
         dayEl.title = `${dateStr}: ${dayUploads} upload${dayUploads !== 1 ? 's' : ''}`;
         calendarGrid.appendChild(dayEl);
     }
+}
+
+function renderWeeklyCalendar() {
+    const calendarGrid = document.getElementById('weeklyCalendarGrid');
+    const titleEl = document.getElementById('weeklyCalendarTitle');
+    calendarGrid.innerHTML = '';
+
+    const year = state.currentYearView;
+    titleEl.textContent = `${year}`;
+
+    // Get first day of the year
+    const yearStart = new Date(year, 0, 1);
+    
+    // Find the first Sunday of the year (or the Sunday before if year doesn't start on Sunday)
+    const firstSunday = new Date(yearStart);
+    const dayOfWeek = yearStart.getDay();
+    if (dayOfWeek !== 0) {
+        firstSunday.setDate(yearStart.getDate() - dayOfWeek);
+    }
+
+    const today = new Date();
+    const currentWeekStart = getWeekStart(today);
+
+    // Render 52 weeks
+    for (let weekNum = 0; weekNum < 52; weekNum++) {
+        const weekStart = new Date(firstSunday);
+        weekStart.setDate(firstSunday.getDate() + (weekNum * 7));
+        
+        const weekEnd = new Date(weekStart);
+        weekEnd.setDate(weekStart.getDate() + 6);
+
+        // Count uploads in this week
+        const weekUploads = state.uploads.filter(upload => {
+            const uploadDate = new Date(upload.date);
+            return uploadDate >= weekStart && uploadDate <= weekEnd;
+        }).length;
+
+        const weekEl = document.createElement('div');
+        weekEl.className = 'calendar-week';
+        
+        // Color based on upload count (0-21 possible)
+        // Using same color scheme as daily: 0, 1-7 (low), 8-14 (medium), 15-21 (high)
+        if (weekUploads === 0) {
+            // Keep default gray
+        } else if (weekUploads <= 7) {
+            weekEl.classList.add('has-upload-low');
+        } else if (weekUploads <= 14) {
+            weekEl.classList.add('has-upload-medium');
+        } else if (weekUploads <= 21) {
+            weekEl.classList.add('has-upload-high');
+        }
+
+        // Mark current week
+        if (weekStart.getTime() === currentWeekStart.getTime()) {
+            weekEl.classList.add('current-week');
+        }
+
+        weekEl.title = `Week ${weekNum + 1} (${weekStart.toLocaleDateString()} - ${weekEnd.toLocaleDateString()}): ${weekUploads} upload${weekUploads !== 1 ? 's' : ''}`;
+        
+        calendarGrid.appendChild(weekEl);
+    }
+}
+
+function renderCalendar() {
+    // Legacy function - keeping for compatibility
+    renderDailyCalendar();
+    renderWeeklyCalendar();
 }
 
 function renderGallery() {
@@ -513,6 +656,9 @@ function renderTitles(type) {
         const unlocked = currentStreak >= title.requirement;
         if (!unlocked) {
             item.classList.add('locked');
+        } else {
+            // Add tier class for hover effects
+            item.classList.add(title.tier);
         }
 
         const isSelected = state.selectedTitle && 
@@ -529,7 +675,7 @@ function renderTitles(type) {
                 <span class="title-tier ${title.tier}">${title.tier}</span>
                 <span>${prefix} ${title.name}</span>
             </div>
-            <div class="title-requirement">${unlocked ? 'Unlocked!' : `${title.requirement} ${type === 'daily' ? 'days streak' : 'weeks streak'} needed`}</div>
+            <div class="title-requirement">${unlocked ? 'Unlocked!' : `${title.requirement} ${type === 'daily' ? 'days' : 'weeks'} needed`}</div>
         `;
 
         if (unlocked) {
@@ -614,6 +760,18 @@ function saveState() {
 function loadState() {
     const saved = localStorage.getItem('artistStreakState');
     if (saved) {
-        state = { ...state, ...JSON.parse(saved) };
+        const loaded = JSON.parse(saved);
+        state = { ...state, ...loaded };
+        
+        // Convert date strings back to Date objects
+        if (state.currentMonthView) {
+            state.currentMonthView = new Date(state.currentMonthView);
+        } else {
+            state.currentMonthView = new Date();
+        }
+        
+        if (!state.currentYearView) {
+            state.currentYearView = new Date().getFullYear();
+        }
     }
 }
