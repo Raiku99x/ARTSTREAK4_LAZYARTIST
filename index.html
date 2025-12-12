@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Artist Streak Tracker</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Profile Section -->
+        <div class="profile-section">
+            <div class="profile-avatar" id="profileAvatar">
+                <input type="file" id="avatarInput" accept="image/*" style="display: none;">
+                🎨
+            </div>
+            <div class="profile-info">
+                <input type="text" id="username" placeholder="Enter your name..." class="username-input">
+                <div class="title-display" id="currentTitle">
+                    <span class="title-badge">No Title Selected</span>
+                    <button class="change-title-btn" id="changeTitleBtn">Change Title</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Streak Counters -->
+        <div class="streak-grid">
+            <!-- Daily Streak -->
+            <div class="streak-card daily">
+                <div class="streak-header">
+                    <h2>🔥 Daily Streak</h2>
+                    <div class="streak-status" id="dailyStatus">Active</div>
+                </div>
+                <div class="streak-number" id="dailyStreak">0</div>
+                <div class="streak-record">Longest: <span id="dailyLongest">0</span> days</div>
+                <div class="timer-container">
+                    <div class="timer-label">Next Reset:</div>
+                    <div class="timer" id="dailyTimer">--:--:--</div>
+                </div>
+                <div class="upload-count">
+                    Today: <span id="dailyUploadCount">0</span>/3 uploads
+                </div>
+            </div>
+
+            <!-- Weekly Streak -->
+            <div class="streak-card weekly">
+                <div class="streak-header">
+                    <h2>📅 Weekly Streak</h2>
+                    <div class="streak-status" id="weeklyStatus">Active</div>
+                </div>
+                <div class="streak-number" id="weeklyStreak">0</div>
+                <div class="streak-record">Longest: <span id="weeklyLongest">0</span> weeks</div>
+                <div class="timer-container">
+                    <div class="timer-label">Week Ends:</div>
+                    <div class="timer" id="weeklyTimer">--:--:--</div>
+                </div>
+                <div class="upload-count">
+                    This Week: <span id="weeklyUploadCount">0</span>/7 uploads
+                </div>
+            </div>
+        </div>
+
+        <!-- Upload Section -->
+        <div class="upload-section">
+            <h3>📤 Upload Your Art</h3>
+            <input type="file" id="fileInput" accept="image/*" style="display: none;">
+            <button class="upload-btn" id="uploadBtn">
+                <span class="btn-icon">🎨</span>
+                <span class="btn-text">Choose Image</span>
+            </button>
+            <div class="upload-info" id="uploadInfo"></div>
+        </div>
+
+        <!-- Calendar Heat Map -->
+        <div class="calendar-section">
+            <h3>📊 Upload Calendar</h3>
+            <div class="calendar-grid" id="calendarGrid"></div>
+        </div>
+
+        <!-- Gallery -->
+        <div class="gallery-section">
+            <h3>🖼️ Your Art Gallery</h3>
+            <div class="gallery-grid" id="galleryGrid">
+                <div class="empty-gallery">No uploads yet. Start your streak today! 🎨</div>
+            </div>
+        </div>
+
+        <!-- Title Selection Modal -->
+        <div class="modal" id="titleModal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>🏆 Select Your Title</h2>
+                    <button class="close-btn" id="closeModal">&times;</button>
+                </div>
+                <div class="title-tabs">
+                    <button class="tab-btn active" data-tab="daily">Daily Titles</button>
+                    <button class="tab-btn" data-tab="weekly">Weekly Titles</button>
+                </div>
+                <div class="title-list" id="titleList"></div>
+            </div>
+        </div>
+
+        <!-- Fullscreen Image Modal -->
+        <div class="fullscreen-modal" id="fullscreenModal">
+            <span class="fullscreen-close" id="fullscreenClose">&times;</span>
+            <img class="fullscreen-img" id="fullscreenImg" src="" alt="Fullscreen Art">
+            <div class="fullscreen-info" id="fullscreenInfo"></div>
+        </div>
+
+        <!-- Milestone Notification -->
+        <div class="milestone-notification" id="milestoneNotif">
+            <div class="milestone-content">
+                <div class="milestone-icon">🎉</div>
+                <div class="milestone-text"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
