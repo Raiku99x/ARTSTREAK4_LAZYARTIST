@@ -1,1113 +1,777 @@
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    min-height: 100vh;
-    padding: 20px;
-    color: #333;
-}
-
-.container {
-    max-width: 1200px;
-    margin: 0 auto;
-}
-
-/* Profile Section */
-.profile-section {
-    background: white;
-    border-radius: 20px;
-    padding: 30px;
-    margin-bottom: 30px;
-    display: flex;
-    align-items: center;
-    gap: 20px;
-    box-shadow: 0 10px 40px rgba(0,0,0,0.2);
-    animation: slideDown 0.6s ease-out;
-}
-
-@keyframes slideDown {
-    from {
-        opacity: 0;
-        transform: translateY(-30px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-.profile-avatar {
-    font-size: 60px;
-    width: 80px;
-    height: 80px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    border-radius: 50%;
-    animation: pulse 2s infinite;
-    cursor: pointer;
-    position: relative;
-    overflow: hidden;
-    transition: transform 0.3s;
-}
-
-.profile-avatar:hover {
-    transform: scale(1.05);
-}
-
-.profile-avatar img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    position: absolute;
-    top: 0;
-    left: 0;
-}
-
-@keyframes pulse {
-    0%, 100% {
-        transform: scale(1);
-    }
-    50% {
-        transform: scale(1.05);
-    }
-}
-
-.profile-info {
-    flex: 1;
-}
-
-.username-input {
-    font-size: 28px;
-    font-weight: bold;
-    border: none;
-    border-bottom: 2px solid #e0e0e0;
-    padding: 5px;
-    width: 100%;
-    max-width: 400px;
-    transition: border-color 0.3s;
-}
-
-.username-input:focus {
-    outline: none;
-    border-bottom-color: #667eea;
-}
-
-.title-display {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-    margin-top: 10px;
-}
-
-.title-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 5px;
-    padding: 8px 16px;
-    color: white;
-    border-radius: 20px;
-    font-weight: 600;
-    font-size: 14px;
-}
-
-.title-badge.common {
-    background: linear-gradient(135deg, #94a3b8 0%, #64748b 100%);
-    animation: shimmer 3s infinite;
-}
-
-.title-badge.uncommon {
-    background: linear-gradient(135deg, #60a5fa 0%, #3b82f6 100%);
-    animation: shimmerPulse 2.5s infinite;
-}
-
-.title-badge.rare {
-    background: linear-gradient(135deg, #c084fc 0%, #a855f7 100%);
-    animation: rareGlow 2s infinite;
-}
-
-.title-badge.epic {
-    background: linear-gradient(135deg, #fb923c 0%, #f97316 100%);
-    animation: epicFlame 1.5s infinite;
-    box-shadow: 0 0 15px rgba(251, 146, 60, 0.4);
-}
-
-.title-badge.legendary {
-    background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
-    animation: legendaryShine 2s infinite;
-    box-shadow: 0 0 25px rgba(251, 191, 36, 0.6), 0 0 50px rgba(251, 191, 36, 0.3);
-}
-
-.title-badge.mythic {
-    background: linear-gradient(135deg, #ec4899 0%, #8b5cf6 50%, #3b82f6 100%);
-    background-size: 200% 200%;
-    animation: mythicRainbow 3s infinite, mythicFloat 2s ease-in-out infinite;
-    box-shadow: 0 0 30px rgba(236, 72, 153, 0.8), 0 0 60px rgba(139, 92, 246, 0.5), 0 0 90px rgba(59, 130, 246, 0.3);
-    text-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
-    font-weight: 700;
-    border: 2px solid rgba(255, 255, 255, 0.5);
-}
-
-.title-badge.no-title {
-    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-    animation: shimmer 3s infinite;
-}
-
-@keyframes shimmer {
-    0%, 100% {
-        opacity: 1;
-    }
-    50% {
-        opacity: 0.8;
-    }
-}
-
-@keyframes shimmerPulse {
-    0%, 100% {
-        opacity: 1;
-        transform: scale(1);
-    }
-    50% {
-        opacity: 0.85;
-        transform: scale(1.02);
-    }
-}
-
-@keyframes rareGlow {
-    0%, 100% {
-        box-shadow: 0 0 10px rgba(168, 85, 247, 0.3);
-        transform: scale(1);
-    }
-    50% {
-        box-shadow: 0 0 20px rgba(168, 85, 247, 0.6);
-        transform: scale(1.03);
-    }
-}
-
-@keyframes epicFlame {
-    0%, 100% {
-        box-shadow: 0 0 15px rgba(251, 146, 60, 0.4), 0 0 30px rgba(249, 115, 22, 0.2);
-        transform: scale(1);
-    }
-    50% {
-        box-shadow: 0 0 25px rgba(251, 146, 60, 0.6), 0 0 50px rgba(249, 115, 22, 0.4);
-        transform: scale(1.05);
-    }
-}
-
-@keyframes legendaryShine {
-    0%, 100% {
-        box-shadow: 0 0 25px rgba(251, 191, 36, 0.6), 0 0 50px rgba(251, 191, 36, 0.3);
-        filter: brightness(1);
-        transform: scale(1);
-    }
-    50% {
-        box-shadow: 0 0 35px rgba(251, 191, 36, 0.8), 0 0 70px rgba(251, 191, 36, 0.5), 0 0 100px rgba(251, 191, 36, 0.2);
-        filter: brightness(1.2);
-        transform: scale(1.05);
-    }
-}
-
-@keyframes mythicRainbow {
-    0% {
-        background-position: 0% 50%;
-        filter: hue-rotate(0deg) brightness(1.2);
-    }
-    50% {
-        background-position: 100% 50%;
-        filter: hue-rotate(20deg) brightness(1.4);
-    }
-    100% {
-        background-position: 0% 50%;
-        filter: hue-rotate(0deg) brightness(1.2);
-    }
-}
-
-@keyframes mythicFloat {
-    0%, 100% {
-        transform: translateY(0px) scale(1);
-    }
-    50% {
-        transform: translateY(-3px) scale(1.08);
-    }
-}
-
-.change-title-btn {
-    padding: 8px 16px;
-    background: #667eea;
-    color: white;
-    border: none;
-    border-radius: 20px;
-    cursor: pointer;
-    font-weight: 600;
-    transition: all 0.3s;
-}
-
-.change-title-btn:hover {
-    background: #5568d3;
-    transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
-}
-
-/* Streak Grid */
-.streak-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 20px;
-    margin-bottom: 30px;
-}
-
-.streak-card {
-    background: white;
-    border-radius: 20px;
-    padding: 30px;
-    box-shadow: 0 10px 40px rgba(0,0,0,0.2);
-    animation: fadeInUp 0.6s ease-out;
-    animation-fill-mode: both;
-    position: relative;
-    overflow: hidden;
-}
-
-.streak-card.daily {
-    animation-delay: 0.1s;
-}
-
-.streak-card.weekly {
-    animation-delay: 0.2s;
-}
-
-@keyframes fadeInUp {
-    from {
-        opacity: 0;
-        transform: translateY(30px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-.streak-card::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 5px;
-    background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
-}
-
-.streak-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
-}
-
-.streak-header h2 {
-    font-size: 24px;
-    color: #333;
-}
-
-.streak-status {
-    padding: 5px 12px;
-    background: #4ade80;
-    color: white;
-    border-radius: 12px;
-    font-size: 12px;
-    font-weight: 600;
-    text-transform: uppercase;
-}
-
-.streak-status.at-risk {
-    background: #f59e0b;
-    animation: warningPulse 1s infinite;
-}
-
-.streak-status.broken {
-    background: #ef4444;
-}
-
-@keyframes warningPulse {
-    0%, 100% {
-        opacity: 1;
-    }
-    50% {
-        opacity: 0.6;
-    }
-}
-
-.streak-number {
-    font-size: 72px;
-    font-weight: bold;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    text-align: center;
-    margin: 20px 0;
-    animation: countUp 0.8s ease-out;
-}
-
-@keyframes countUp {
-    from {
-        opacity: 0;
-        transform: scale(0.5);
-    }
-    to {
-        opacity: 1;
-        transform: scale(1);
-    }
-}
-
-.streak-record {
-    text-align: center;
-    color: #666;
-    font-size: 16px;
-    margin-bottom: 20px;
-}
-
-.streak-record span {
-    font-weight: bold;
-    color: #667eea;
-}
-
-.timer-container {
-    background: #f3f4f6;
-    border-radius: 12px;
-    padding: 15px;
-    margin-top: 20px;
-}
-
-.timer-label {
-    font-size: 12px;
-    color: #666;
-    text-transform: uppercase;
-    font-weight: 600;
-    margin-bottom: 5px;
-}
-
-.timer {
-    font-size: 32px;
-    font-weight: bold;
-    color: #333;
-    font-family: 'Courier New', monospace;
-    text-align: center;
-}
-
-.timer.warning {
-    color: #ef4444;
-    animation: timerFlash 1s infinite;
-}
-
-@keyframes timerFlash {
-    0%, 100% {
-        opacity: 1;
-    }
-    50% {
-        opacity: 0.4;
-    }
-}
-
-.upload-count {
-    margin-top: 15px;
-    text-align: center;
-    font-size: 14px;
-    color: #666;
-}
-
-.upload-count span {
-    font-weight: bold;
-    color: #667eea;
-}
-
-/* Upload Section */
-.upload-section {
-    background: white;
-    border-radius: 20px;
-    padding: 30px;
-    margin-bottom: 30px;
-    box-shadow: 0 10px 40px rgba(0,0,0,0.2);
-    animation: fadeInUp 0.6s ease-out 0.3s;
-    animation-fill-mode: both;
-    text-align: center;
-}
-
-.upload-section h3 {
-    margin-bottom: 20px;
-    color: #333;
-}
-
-.upload-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 10px;
-    padding: 15px 40px;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
-    border: none;
-    border-radius: 30px;
-    font-size: 18px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.3s;
-}
-
-.upload-btn:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
-}
-
-.upload-btn:active {
-    transform: translateY(-1px);
-}
-
-.btn-icon {
-    font-size: 24px;
-}
-
-.upload-info {
-    margin-top: 15px;
-    padding: 10px;
-    border-radius: 8px;
-    font-size: 14px;
-}
-
-.upload-info.success {
-    background: #d1fae5;
-    color: #065f46;
-}
-
-.upload-info.error {
-    background: #fee2e2;
-    color: #991b1b;
-}
-
-/* Calendar Section */
-.calendar-section {
-    background: white;
-    border-radius: 20px;
-    padding: 30px;
-    margin-bottom: 30px;
-    box-shadow: 0 10px 40px rgba(0,0,0,0.2);
-    animation: fadeInUp 0.6s ease-out 0.4s;
-    animation-fill-mode: both;
-}
-
-.calendar-tabs {
-    display: flex;
-    gap: 10px;
-    margin-bottom: 25px;
-    border-bottom: 2px solid #e5e7eb;
-}
-
-.calendar-tab-btn {
-    padding: 12px 24px;
-    background: none;
-    border: none;
-    cursor: pointer;
-    font-weight: 600;
-    font-size: 16px;
-    color: #666;
-    transition: all 0.3s;
-    position: relative;
-}
-
-.calendar-tab-btn.active {
-    color: #667eea;
-}
-
-.calendar-tab-btn.active::after {
-    content: '';
-    position: absolute;
-    bottom: -2px;
-    left: 0;
-    right: 0;
-    height: 2px;
-    background: #667eea;
-}
-
-.calendar-tab-btn:hover {
-    color: #667eea;
-}
-
-.calendar-view {
-    display: block;
-}
-
-.calendar-view.hidden {
-    display: none;
-}
-
-.calendar-view h4 {
-    color: #333;
-    font-size: 18px;
-    margin-bottom: 15px;
-    text-align: center;
-    font-weight: 600;
-}
-
-.calendar-controls {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 20px;
-    margin-bottom: 20px;
-}
-
-.calendar-nav-btn {
-    background: #667eea;
-    color: white;
-    border: none;
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    font-size: 18px;
-    cursor: pointer;
-    transition: all 0.3s;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.calendar-nav-btn:hover {
-    background: #5568d3;
-    transform: scale(1.1);
-}
-
-.calendar-nav-btn:active {
-    transform: scale(0.95);
-}
-
-.calendar-grid-wrapper {
-    display: flex;
-    justify-content: center;
-}
-
-.calendar-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(35px, 1fr));
-    gap: 6px;
-    max-width: 100%;
-}
-
-.calendar-day {
-    aspect-ratio: 1;
-    background: #f3f4f6;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: all 0.3s;
-    position: relative;
-}
-
-.calendar-day:hover {
-    transform: scale(1.3);
-    z-index: 10;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-}
-
-.calendar-day.has-upload-1 {
-    background: #bfdbfe;
-}
-
-.calendar-day.has-upload-2 {
-    background: #60a5fa;
-}
-
-.calendar-day.has-upload-3 {
-    background: #2563eb;
-}
-
-.calendar-day.today {
-    border: 3px solid #667eea;
-    box-shadow: 0 0 0 1px #667eea;
-}
-
-.calendar-week {
-    aspect-ratio: 1;
-    background: #f3f4f6;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: all 0.3s;
-    position: relative;
-}
-
-.calendar-week:hover {
-    transform: scale(1.3);
-    z-index: 10;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-}
-
-.calendar-week.has-upload-low {
-    background: #bfdbfe;
-}
-
-.calendar-week.has-upload-medium {
-    background: #60a5fa;
-}
-
-.calendar-week.has-upload-high {
-    background: #2563eb;
-}
-
-.calendar-week.has-upload-complete {
-    background: #1e40af;
-}
-
-.calendar-week.current-week {
-    border: 3px solid #667eea;
-    box-shadow: 0 0 0 1px #667eea;
-}
-
-/* Gallery Section */
-.gallery-section {
-    background: white;
-    border-radius: 20px;
-    padding: 30px;
-    box-shadow: 0 10px 40px rgba(0,0,0,0.2);
-    animation: fadeInUp 0.6s ease-out 0.5s;
-    animation-fill-mode: both;
-}
-
-.gallery-section h3 {
-    margin-bottom: 20px;
-    color: #333;
-}
-
-.gallery-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-    gap: 15px;
-}
-
-.empty-gallery {
-    grid-column: 1 / -1;
-    text-align: center;
-    padding: 60px 20px;
-    color: #999;
-    font-size: 18px;
-}
-
-.gallery-item {
-    position: relative;
-    aspect-ratio: 1;
-    border-radius: 12px;
-    overflow: hidden;
-    cursor: pointer;
-    transition: all 0.3s;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-    animation: scaleIn 0.4s ease-out;
-}
-
-@keyframes scaleIn {
-    from {
-        opacity: 0;
-        transform: scale(0.8);
-    }
-    to {
-        opacity: 1;
-        transform: scale(1);
-    }
-}
-
-.gallery-item:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 25px rgba(0,0,0,0.2);
-}
-
-.gallery-item img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-
-.gallery-item-info {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
-    color: white;
-    padding: 10px;
-    font-size: 11px;
-    opacity: 0;
-    transition: opacity 0.3s;
-}
-
-.gallery-item:hover .gallery-item-info {
-    opacity: 1;
-}
-
-/* Modal */
-.modal {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0,0,0,0.8);
-    z-index: 1000;
-    animation: fadeIn 0.3s;
-}
-
-.modal.active {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-    }
-    to {
-        opacity: 1;
-    }
-}
-
-.modal-content {
-    background: white;
-    border-radius: 20px;
-    padding: 30px;
-    max-width: 600px;
-    width: 90%;
-    max-height: 80vh;
-    overflow-y: auto;
-    animation: modalSlideUp 0.4s ease-out;
-}
-
-@keyframes modalSlideUp {
-    from {
-        opacity: 0;
-        transform: translateY(50px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-.modal-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
-}
-
-.modal-header h2 {
-    color: #333;
-}
-
-.close-btn {
-    background: none;
-    border: none;
-    font-size: 32px;
-    cursor: pointer;
-    color: #999;
-    transition: color 0.3s;
-}
-
-.close-btn:hover {
-    color: #333;
-}
-
-.title-tabs {
-    display: flex;
-    gap: 10px;
-    margin-bottom: 20px;
-    border-bottom: 2px solid #e5e7eb;
-}
-
-.tab-btn {
-    padding: 10px 20px;
-    background: none;
-    border: none;
-    cursor: pointer;
-    font-weight: 600;
-    color: #666;
-    transition: all 0.3s;
-    position: relative;
-}
-
-.tab-btn.active {
-    color: #667eea;
-}
-
-.tab-btn.active::after {
-    content: '';
-    position: absolute;
-    bottom: -2px;
-    left: 0;
-    right: 0;
-    height: 2px;
-    background: #667eea;
-}
-
-.title-list {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
-
-.title-item {
-    padding: 15px;
-    border: 2px solid #e5e7eb;
-    border-radius: 12px;
-    cursor: pointer;
-    transition: all 0.3s;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.title-item:hover {
-    border-color: #667eea;
-    background: #f9fafb;
-    transform: translateX(5px);
-}
-
-.title-item.rare:hover {
-    box-shadow: 0 0 15px rgba(168, 85, 247, 0.3);
-}
-
-.title-item.epic:hover {
-    box-shadow: 0 0 20px rgba(251, 146, 60, 0.4);
-}
-
-.title-item.legendary:hover {
-    box-shadow: 0 0 25px rgba(251, 191, 36, 0.5);
-}
-
-.title-item.mythic:hover {
-    box-shadow: 0 0 30px rgba(236, 72, 153, 0.6), 0 0 50px rgba(139, 92, 246, 0.3);
-    transform: translateX(5px) scale(1.02);
-}
-
-.title-item.locked {
-    opacity: 0.5;
-    cursor: not-allowed;
-}
-
-.title-item.locked:hover {
-    border-color: #e5e7eb;
-    background: white;
-}
-
-.title-item.selected {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
-    border-color: #667eea;
-}
-
-.title-item-name {
-    font-weight: 600;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-.title-tier {
-    font-size: 10px;
-    padding: 3px 8px;
-    border-radius: 8px;
-    text-transform: uppercase;
-    font-weight: 700;
-}
-
-.title-tier.common {
-    background: #94a3b8;
-    color: white;
-}
-
-.title-tier.uncommon {
-    background: #3b82f6;
-    color: white;
-}
-
-.title-tier.rare {
-    background: #a855f7;
-    color: white;
-}
-
-.title-tier.epic {
-    background: #f97316;
-    color: white;
-}
-
-.title-tier.legendary {
-    background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
-    color: white;
-    animation: legendaryPulse 2s infinite;
-}
-
-.title-tier.mythic {
-    background: linear-gradient(135deg, #ec4899 0%, #8b5cf6 50%, #3b82f6 100%);
-    background-size: 200% 200%;
-    color: white;
-    animation: mythicShimmer 3s infinite;
-    box-shadow: 0 0 10px rgba(236, 72, 153, 0.6);
-}
-
-@keyframes legendaryPulse {
-    0%, 100% {
-        transform: scale(1);
-        box-shadow: 0 0 5px rgba(251, 191, 36, 0.3);
-    }
-    50% {
-        transform: scale(1.1);
-        box-shadow: 0 0 10px rgba(251, 191, 36, 0.6);
-    }
-}
-
-@keyframes mythicShimmer {
-    0% {
-        background-position: 0% 50%;
-    }
-    50% {
-        background-position: 100% 50%;
-    }
-    100% {
-        background-position: 0% 50%;
-    }
-}
-
-.title-requirement {
-    font-size: 12px;
-    color: #666;
-}
-
-.title-item.selected .title-requirement {
-    color: rgba(255,255,255,0.9);
-}
-
-/* Fullscreen Modal */
-.fullscreen-modal {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0,0,0,0.95);
-    z-index: 2000;
-    animation: fadeIn 0.3s;
-}
-
-.fullscreen-modal.active {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-}
-
-.fullscreen-close {
-    position: absolute;
-    top: 20px;
-    right: 30px;
-    font-size: 48px;
-    color: white;
-    cursor: pointer;
-    transition: color 0.3s;
-    z-index: 2001;
-}
-
-.fullscreen-close:hover {
-    color: #667eea;
-}
-
-.fullscreen-img {
-    max-width: 90%;
-    max-height: 80vh;
-    object-fit: contain;
-    border-radius: 12px;
-    animation: zoomIn 0.4s ease-out;
-}
-
-@keyframes zoomIn {
-    from {
-        opacity: 0;
-        transform: scale(0.8);
-    }
-    to {
-        opacity: 1;
-        transform: scale(1);
-    }
-}
-
-.fullscreen-info {
-    color: white;
-    margin-top: 20px;
-    text-align: center;
-    font-size: 16px;
-}
-
-/* Milestone Notification */
-.milestone-notification {
-    position: fixed;
-    top: 20px;
-    right: 20px;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
-    padding: 20px 30px;
-    border-radius: 16px;
-    box-shadow: 0 10px 40px rgba(0,0,0,0.3);
-    z-index: 3000;
-    transform: translateX(400px);
-    transition: transform 0.5s ease-out;
-}
-
-.milestone-notification.show {
-    transform: translateX(0);
-}
-
-.milestone-content {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-}
-
-.milestone-icon {
-    font-size: 32px;
-    animation: bounce 0.6s infinite alternate;
-}
-
-@keyframes bounce {
-    from {
-        transform: translateY(0);
-    }
-    to {
-        transform: translateY(-10px);
-    }
-}
-
-.milestone-text {
-    font-weight: 600;
-    font-size: 16px;
-}
-
-/* Responsive */
-@media (max-width: 768px) {
-    .streak-grid {
-        grid-template-columns: 1fr;
-    }
+// Title Data
+const DAILY_TITLES = [
+    { id: 1, name: "Fresh Canvas", requirement: 1, tier: "common" },
+    { id: 2, name: "Sketch Starter", requirement: 3, tier: "common" },
+    { id: 3, name: "Line Learner", requirement: 7, tier: "common" },
+    { id: 4, name: "Ten-Day Illustrator", requirement: 10, tier: "common" },
+    { id: 5, name: "Half-Month Creator", requirement: 15, tier: "common" },
+    { id: 6, name: "Brush Beginner", requirement: 20, tier: "common" },
+    { id: 7, name: "One-Month Maker", requirement: 30, tier: "common" },
+    { id: 8, name: "Form Builder", requirement: 45, tier: "uncommon" },
+    { id: 9, name: "Stroke Striver", requirement: 60, tier: "uncommon" },
+    { id: 10, name: "Color Explorer", requirement: 80, tier: "uncommon" },
+    { id: 11, name: "Century Sketcher", requirement: 100, tier: "uncommon" },
+    { id: 12, name: "Half-Year Artist", requirement: 150, tier: "rare" },
+    { id: 13, name: "Double-Century Designer", requirement: 200, tier: "rare" },
+    { id: 14, name: "Quarter-K Creator", requirement: 250, tier: "rare" },
+    { id: 15, name: "Triple-Century Artisan", requirement: 300, tier: "rare" },
+    { id: 16, name: "Vision Vanguard", requirement: 350, tier: "epic" },
+    { id: 17, name: "Quad-Century Illustrator", requirement: 400, tier: "epic" },
+    { id: 18, name: "Half-Thousand Artmaster", requirement: 500, tier: "epic" },
+    { id: 19, name: "Six-Hundred Sketch Sage", requirement: 600, tier: "legendary" },
+    { id: 20, name: "Canvas Conqueror", requirement: 750, tier: "mythic" }
+];
+
+const WEEKLY_TITLES = [
+    { id: 1, name: "Weekend Sketcher", requirement: 1, tier: "common" },
+    { id: 2, name: "Line-Loyal Apprentice", requirement: 2, tier: "common" },
+    { id: 3, name: "Monthly Maker", requirement: 4, tier: "common" },
+    { id: 4, name: "Palette Pathfinder", requirement: 6, tier: "common" },
+    { id: 5, name: "Ten-Week Illustrator", requirement: 10, tier: "common" },
+    { id: 6, name: "Artful Adventurer", requirement: 20, tier: "uncommon" },
+    { id: 7, name: "Canvas Challenger", requirement: 30, tier: "uncommon" },
+    { id: 8, name: "Brushwork Guardian", requirement: 40, tier: "uncommon" },
+    { id: 9, name: "Yearly Artisan", requirement: 52, tier: "uncommon" },
+    { id: 10, name: "Seasoned Stylist", requirement: 65, tier: "uncommon" },
+    { id: 11, name: "Virtuoso Voyager", requirement: 80, tier: "rare" },
+    { id: 12, name: "Century Creator", requirement: 100, tier: "rare" },
+    { id: 13, name: "Studio Sentinel", requirement: 120, tier: "rare" },
+    { id: 14, name: "Craft Crusader", requirement: 140, tier: "rare" },
+    { id: 15, name: "Masterpiece Keeper", requirement: 160, tier: "epic" },
+    { id: 16, name: "Easel Emperor", requirement: 180, tier: "epic" },
+    { id: 17, name: "Grandmaster of Mediums", requirement: 200, tier: "legendary" },
+    { id: 18, name: "The Four-Year Evergreen Artist", requirement: 208, tier: "mythic" }
+];
+
+// State
+let state = {
+    username: "Artist",
+    avatarImage: null,
+    dailyStreak: 0,
+    weeklyStreak: 0,
+    dailyLongest: 0,
+    weeklyLongest: 0,
+    lastDailyUpload: null,
+    lastWeeklyUpload: null,
+    currentWeekStart: null,
+    uploads: [],
+    selectedTitle: null,
+    dailyUploadsToday: 0,
+    weeklyUploadsThisWeek: 0,
+    currentMonthView: new Date(),
+    currentYearView: new Date().getFullYear()
+};
+
+// Initialize
+document.addEventListener('DOMContentLoaded', () => {
+    loadState();
+    initializeElements();
+    updateUI();
+    startTimers();
+    renderDailyCalendar();
+    renderWeeklyCalendar();
+    renderGallery();
+});
+
+function initializeElements() {
+    const uploadBtn = document.getElementById('uploadBtn');
+    const fileInput = document.getElementById('fileInput');
+    const changeTitleBtn = document.getElementById('changeTitleBtn');
+    const closeModal = document.getElementById('closeModal');
+    const titleModal = document.getElementById('titleModal');
+    const usernameInput = document.getElementById('username');
+    const fullscreenClose = document.getElementById('fullscreenClose');
+    const fullscreenModal = document.getElementById('fullscreenModal');
+    const profileAvatar = document.getElementById('profileAvatar');
+    const avatarInput = document.getElementById('avatarInput');
+
+    uploadBtn.addEventListener('click', () => fileInput.click());
+    fileInput.addEventListener('change', handleFileUpload);
+    changeTitleBtn.addEventListener('click', () => openTitleModal());
+    closeModal.addEventListener('click', () => titleModal.classList.remove('active'));
+    usernameInput.addEventListener('input', (e) => {
+        state.username = e.target.value || "Artist";
+        saveState();
+    });
+    fullscreenClose.addEventListener('click', () => fullscreenModal.classList.remove('active'));
+    fullscreenModal.addEventListener('click', (e) => {
+        if (e.target === fullscreenModal) {
+            fullscreenModal.classList.remove('active');
+        }
+    });
+
+    // Profile avatar upload
+    profileAvatar.addEventListener('click', () => avatarInput.click());
+    avatarInput.addEventListener('change', handleAvatarUpload);
+
+    // Tab switching
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            renderTitles(btn.dataset.tab);
+        });
+    });
+
+    // Calendar tab switching
+    document.querySelectorAll('.calendar-tab-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            document.querySelectorAll('.calendar-tab-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            
+            const calendarType = btn.dataset.calendar;
+            document.getElementById('dailyCalendarView').classList.toggle('hidden', calendarType !== 'daily');
+            document.getElementById('weeklyCalendarView').classList.toggle('hidden', calendarType !== 'weekly');
+        });
+    });
+
+    // Calendar navigation
+    document.getElementById('prevMonth').addEventListener('click', () => {
+        state.currentMonthView.setMonth(state.currentMonthView.getMonth() - 1);
+        renderDailyCalendar();
+        saveState();
+    });
+
+    document.getElementById('nextMonth').addEventListener('click', () => {
+        const today = new Date();
+        const nextMonth = new Date(state.currentMonthView);
+        nextMonth.setMonth(nextMonth.getMonth() + 1);
+        
+        // Don't allow going beyond current month
+        if (nextMonth <= today) {
+            state.currentMonthView = nextMonth;
+            renderDailyCalendar();
+            saveState();
+        }
+    });
+
+    document.getElementById('prevYear').addEventListener('click', () => {
+        state.currentYearView--;
+        renderWeeklyCalendar();
+        saveState();
+    });
+
+    document.getElementById('nextYear').addEventListener('click', () => {
+        const currentYear = new Date().getFullYear();
+        
+        // Don't allow going beyond current year
+        if (state.currentYearView < currentYear) {
+            state.currentYearView++;
+            renderWeeklyCalendar();
+            saveState();
+        }
+    });
+
+    usernameInput.value = state.username;
     
-    .gallery-grid {
-        grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    // Load avatar if exists
+    if (state.avatarImage) {
+        updateAvatarDisplay();
     }
-    
-    .profile-section {
-        flex-direction: column;
-        text-align: center;
+}
+
+function handleFileUpload(e) {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    // Check daily upload limit (max 3 per day)
+    if (state.dailyUploadsToday >= 3) {
+        showUploadInfo("You've reached the daily upload limit (3 uploads)", 'error');
+        return;
     }
+
+    const reader = new FileReader();
+    reader.onload = (event) => {
+        const now = new Date();
+        const upload = {
+            id: Date.now(),
+            image: event.target.result,
+            timestamp: now.toISOString(),
+            date: now.toDateString()
+        };
+
+        state.uploads.unshift(upload);
+        state.dailyUploadsToday++;
+        state.weeklyUploadsThisWeek = Math.min(state.weeklyUploadsThisWeek + 1, 21);
+
+        // Update streaks (only first upload of the day counts for daily streak)
+        if (state.dailyUploadsToday === 1) {
+            updateDailyStreak();
+        }
+        
+        // First upload of the week counts for weekly streak
+        if (state.weeklyUploadsThisWeek === 1) {
+            updateWeeklyStreak();
+        }
+
+        saveState();
+        updateUI();
+        renderDailyCalendar();
+        renderWeeklyCalendar();
+        renderGallery();
+        
+        const uploadNum = state.dailyUploadsToday === 1 ? 
+            "✅ Upload complete! Daily & Weekly streaks updated!" : 
+            `✅ Upload ${state.dailyUploadsToday}/3 complete!`;
+        showUploadInfo(uploadNum, 'success');
+        
+        checkMilestones();
+    };
+    reader.readAsDataURL(file);
+    e.target.value = '';
+}
+
+function handleAvatarUpload(e) {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = (event) => {
+        state.avatarImage = event.target.result;
+        saveState();
+        updateAvatarDisplay();
+    };
+    reader.readAsDataURL(file);
+    e.target.value = '';
+}
+
+function updateAvatarDisplay() {
+    const profileAvatar = document.getElementById('profileAvatar');
+    if (state.avatarImage) {
+        profileAvatar.innerHTML = `<img src="${state.avatarImage}" alt="Profile">`;
+    } else {
+        profileAvatar.innerHTML = '🎨';
+    }
+}
+
+function updateDailyStreak() {
+    const now = new Date();
+    const today = now.toDateString();
     
-    .username-input {
-        text-align: center;
+    if (!state.lastDailyUpload) {
+        state.dailyStreak = 1;
+    } else {
+        const lastUpload = new Date(state.lastDailyUpload);
+        const lastDate = lastUpload.toDateString();
+        const yesterday = new Date(now);
+        yesterday.setDate(yesterday.getDate() - 1);
+        const yesterdayStr = yesterday.toDateString();
+
+        if (lastDate === today) {
+            // Already uploaded today
+            return;
+        } else if (lastDate === yesterdayStr) {
+            // Consecutive day
+            state.dailyStreak++;
+        } else {
+            // Streak broken
+            state.dailyStreak = 1;
+        }
+    }
+
+    state.lastDailyUpload = now.toISOString();
+    if (state.dailyStreak > state.dailyLongest) {
+        state.dailyLongest = state.dailyStreak;
+    }
+}
+
+function updateWeeklyStreak() {
+    const now = new Date();
+    
+    if (!state.currentWeekStart) {
+        state.currentWeekStart = getWeekStart(now).toISOString();
+        state.weeklyStreak = 1;
+    } else {
+        const currentWeekStart = getWeekStart(now);
+        const savedWeekStart = new Date(state.currentWeekStart);
+        
+        if (currentWeekStart.getTime() === savedWeekStart.getTime()) {
+            // Same week
+            return;
+        } else {
+            // Check if it's the next week
+            const nextWeek = new Date(savedWeekStart);
+            nextWeek.setDate(nextWeek.getDate() + 7);
+            
+            if (currentWeekStart.getTime() === nextWeek.getTime()) {
+                // Consecutive week
+                state.weeklyStreak++;
+            } else {
+                // Streak broken
+                state.weeklyStreak = 1;
+            }
+            
+            state.currentWeekStart = currentWeekStart.toISOString();
+        }
+    }
+
+    state.lastWeeklyUpload = now.toISOString();
+    if (state.weeklyStreak > state.weeklyLongest) {
+        state.weeklyLongest = state.weeklyStreak;
+    }
+}
+
+function getWeekStart(date) {
+    const d = new Date(date);
+    const day = d.getDay();
+    const diff = d.getDate() - day;
+    return new Date(d.setDate(diff));
+}
+
+function checkStreaks() {
+    const now = new Date();
+    
+    // Check daily streak
+    if (state.lastDailyUpload) {
+        const lastUpload = new Date(state.lastDailyUpload);
+        const lastDate = lastUpload.toDateString();
+        const yesterday = new Date(now);
+        yesterday.setDate(yesterday.getDate() - 1);
+        const yesterdayStr = yesterday.toDateString();
+        const today = now.toDateString();
+
+        if (lastDate !== today && lastDate !== yesterdayStr) {
+            // Streak broken
+            state.dailyStreak = 0;
+        }
+    }
+
+    // Check weekly streak
+    if (state.currentWeekStart) {
+        const currentWeekStart = getWeekStart(now);
+        const savedWeekStart = new Date(state.currentWeekStart);
+        
+        if (currentWeekStart.getTime() !== savedWeekStart.getTime()) {
+            // New week started
+            const lastWeek = new Date(currentWeekStart);
+            lastWeek.setDate(lastWeek.getDate() - 7);
+            
+            if (!state.lastWeeklyUpload || new Date(state.lastWeeklyUpload) < lastWeek) {
+                // Missed last week
+                state.weeklyStreak = 0;
+                state.currentWeekStart = currentWeekStart.toISOString();
+            }
+        }
+    }
+
+    // Reset daily upload count if new day
+    const today = now.toDateString();
+    const lastUploadDate = state.lastDailyUpload ? new Date(state.lastDailyUpload).toDateString() : null;
+    if (lastUploadDate !== today) {
+        state.dailyUploadsToday = 0;
+    }
+
+    // Reset weekly upload count if new week
+    const currentWeekStart = getWeekStart(now);
+    if (!state.currentWeekStart || new Date(state.currentWeekStart).getTime() !== currentWeekStart.getTime()) {
+        state.weeklyUploadsThisWeek = 0;
+    }
+
+    saveState();
+}
+
+function updateUI() {
+    checkStreaks();
+
+    // Update streak numbers
+    document.getElementById('dailyStreak').textContent = state.dailyStreak;
+    document.getElementById('weeklyStreak').textContent = state.weeklyStreak;
+    document.getElementById('dailyLongest').textContent = state.dailyLongest;
+    document.getElementById('weeklyLongest').textContent = state.weeklyLongest;
+
+    // Update upload counts
+    document.getElementById('dailyUploadCount').textContent = state.dailyUploadsToday;
+    document.getElementById('weeklyUploadCount').textContent = Math.min(state.weeklyUploadsThisWeek, 21);
+
+    // Update streak status
+    updateStreakStatus();
+
+    // Update selected title
+    updateTitleDisplay();
+}
+
+function updateStreakStatus() {
+    const dailyStatus = document.getElementById('dailyStatus');
+    const weeklyStatus = document.getElementById('weeklyStatus');
+
+    // Daily status
+    if (state.dailyUploadsToday > 0) {
+        dailyStatus.textContent = 'Complete';
+        dailyStatus.className = 'streak-status';
+    } else if (getTimeUntilMidnight() < 5 * 60 * 60 * 1000) {
+        dailyStatus.textContent = 'At Risk!';
+        dailyStatus.className = 'streak-status at-risk';
+    } else {
+        dailyStatus.textContent = 'Pending';
+        dailyStatus.className = 'streak-status at-risk';
+    }
+
+    // Weekly status
+    if (state.weeklyUploadsThisWeek > 0) {
+        weeklyStatus.textContent = 'Complete';
+        weeklyStatus.className = 'streak-status';
+    } else if (getTimeUntilWeekEnd() < 5 * 60 * 60 * 1000) {
+        weeklyStatus.textContent = 'At Risk!';
+        weeklyStatus.className = 'streak-status at-risk';
+    } else {
+        weeklyStatus.textContent = 'Pending';
+        weeklyStatus.className = 'streak-status at-risk';
+    }
+}
+
+function startTimers() {
+    updateTimers();
+    setInterval(updateTimers, 1000);
+}
+
+function updateTimers() {
+    const dailyTimer = document.getElementById('dailyTimer');
+    const weeklyTimer = document.getElementById('weeklyTimer');
+
+    const dailyTime = getTimeUntilMidnight();
+    const weeklyTime = getTimeUntilWeekEnd();
+
+    dailyTimer.textContent = formatTime(dailyTime);
+    weeklyTimer.textContent = formatWeeklyTime(weeklyTime);
+
+    // Add warning class if under 5 hours
+    if (dailyTime < 5 * 60 * 60 * 1000) {
+        dailyTimer.classList.add('warning');
+    } else {
+        dailyTimer.classList.remove('warning');
+    }
+
+    if (weeklyTime < 5 * 60 * 60 * 1000) {
+        weeklyTimer.classList.add('warning');
+    } else {
+        weeklyTimer.classList.remove('warning');
+    }
+
+    updateStreakStatus();
+}
+
+function getTimeUntilMidnight() {
+    const now = new Date();
+    const midnight = new Date(now);
+    midnight.setHours(23, 59, 59, 999);
+    return midnight - now;
+}
+
+function getTimeUntilWeekEnd() {
+    const now = new Date();
+    const weekEnd = new Date(now);
+    const daysUntilSunday = 7 - now.getDay();
+    weekEnd.setDate(now.getDate() + daysUntilSunday);
+    weekEnd.setHours(23, 59, 59, 999);
+    return weekEnd - now;
+}
+
+function formatTime(ms) {
+    const hours = Math.floor(ms / (1000 * 60 * 60));
+    const minutes = Math.floor((ms % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((ms % (1000 * 60)) / 1000);
+    return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+}
+
+function formatWeeklyTime(ms) {
+    const days = Math.floor(ms / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((ms % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const minutes = Math.floor((ms % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((ms % (1000 * 60)) / 1000);
+    return `${days}:${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+}
+
+function renderDailyCalendar() {
+    const calendarGrid = document.getElementById('dailyCalendarGrid');
+    const titleEl = document.getElementById('dailyCalendarTitle');
+    calendarGrid.innerHTML = '';
+
+    const viewDate = new Date(state.currentMonthView);
+    const year = viewDate.getFullYear();
+    const month = viewDate.getMonth();
+    
+    // Update title
+    const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 
+                        'July', 'August', 'September', 'October', 'November', 'December'];
+    titleEl.textContent = `${monthNames[month]} ${year}`;
+
+    // Get first and last day of the month
+    const firstDay = new Date(year, month, 1);
+    const lastDay = new Date(year, month + 1, 0);
+    const daysInMonth = lastDay.getDate();
+
+    const today = new Date();
+    const todayStr = today.toDateString();
+
+    // Render all days in the month
+    for (let day = 1; day <= daysInMonth; day++) {
+        const date = new Date(year, month, day);
+        const dateStr = date.toDateString();
+
+        const dayUploads = state.uploads.filter(u => u.date === dateStr).length;
+        
+        const dayEl = document.createElement('div');
+        dayEl.className = 'calendar-day';
+        
+        if (dayUploads > 0) {
+            dayEl.classList.add(`has-upload-${Math.min(dayUploads, 3)}`);
+        }
+        
+        if (dateStr === todayStr) {
+            dayEl.classList.add('today');
+        }
+
+        dayEl.title = `${dateStr}: ${dayUploads} upload${dayUploads !== 1 ? 's' : ''}`;
+        calendarGrid.appendChild(dayEl);
+    }
+}
+
+function renderWeeklyCalendar() {
+    const calendarGrid = document.getElementById('weeklyCalendarGrid');
+    const titleEl = document.getElementById('weeklyCalendarTitle');
+    calendarGrid.innerHTML = '';
+
+    const year = state.currentYearView;
+    titleEl.textContent = `${year}`;
+
+    // Get first day of the year
+    const yearStart = new Date(year, 0, 1);
+    
+    // Find the first Sunday of the year (or the Sunday before if year doesn't start on Sunday)
+    const firstSunday = new Date(yearStart);
+    const dayOfWeek = yearStart.getDay();
+    if (dayOfWeek !== 0) {
+        firstSunday.setDate(yearStart.getDate() - dayOfWeek);
+    }
+
+    const today = new Date();
+    const currentWeekStart = getWeekStart(today);
+
+    // Render 52 weeks
+    for (let weekNum = 0; weekNum < 52; weekNum++) {
+        const weekStart = new Date(firstSunday);
+        weekStart.setDate(firstSunday.getDate() + (weekNum * 7));
+        
+        const weekEnd = new Date(weekStart);
+        weekEnd.setDate(weekStart.getDate() + 6);
+
+        // Count uploads in this week
+        const weekUploads = state.uploads.filter(upload => {
+            const uploadDate = new Date(upload.date);
+            return uploadDate >= weekStart && uploadDate <= weekEnd;
+        }).length;
+
+        const weekEl = document.createElement('div');
+        weekEl.className = 'calendar-week';
+        
+        // Color based on upload count (0-21 possible)
+        // Using same color scheme as daily: 0, 1-7 (low), 8-14 (medium), 15-21 (high)
+        if (weekUploads === 0) {
+            // Keep default gray
+        } else if (weekUploads <= 7) {
+            weekEl.classList.add('has-upload-low');
+        } else if (weekUploads <= 14) {
+            weekEl.classList.add('has-upload-medium');
+        } else if (weekUploads <= 21) {
+            weekEl.classList.add('has-upload-high');
+        }
+
+        // Mark current week
+        if (weekStart.getTime() === currentWeekStart.getTime()) {
+            weekEl.classList.add('current-week');
+        }
+
+        weekEl.title = `Week ${weekNum + 1} (${weekStart.toLocaleDateString()} - ${weekEnd.toLocaleDateString()}): ${weekUploads} upload${weekUploads !== 1 ? 's' : ''}`;
+        
+        calendarGrid.appendChild(weekEl);
+    }
+}
+
+function renderCalendar() {
+    // Legacy function - keeping for compatibility
+    renderDailyCalendar();
+    renderWeeklyCalendar();
+}
+
+function renderGallery() {
+    const galleryGrid = document.getElementById('galleryGrid');
+    
+    if (state.uploads.length === 0) {
+        galleryGrid.innerHTML = '<div class="empty-gallery">No uploads yet. Start your streak today! 🎨</div>';
+        return;
+    }
+
+    galleryGrid.innerHTML = '';
+    state.uploads.forEach(upload => {
+        const item = document.createElement('div');
+        item.className = 'gallery-item';
+        
+        const img = document.createElement('img');
+        img.src = upload.image;
+        img.alt = 'Uploaded art';
+        
+        const info = document.createElement('div');
+        info.className = 'gallery-item-info';
+        const date = new Date(upload.timestamp);
+        info.textContent = date.toLocaleString();
+        
+        item.appendChild(img);
+        item.appendChild(info);
+        
+        item.addEventListener('click', () => showFullscreen(upload));
+        
+        galleryGrid.appendChild(item);
+    });
+}
+
+function showFullscreen(upload) {
+    const modal = document.getElementById('fullscreenModal');
+    const img = document.getElementById('fullscreenImg');
+    const info = document.getElementById('fullscreenInfo');
+    
+    img.src = upload.image;
+    const date = new Date(upload.timestamp);
+    info.textContent = `Uploaded: ${date.toLocaleString()}`;
+    
+    modal.classList.add('active');
+}
+
+function openTitleModal() {
+    const modal = document.getElementById('titleModal');
+    modal.classList.add('active');
+    renderTitles('daily');
+}
+
+function renderTitles(type) {
+    const titleList = document.getElementById('titleList');
+    titleList.innerHTML = '';
+
+    const titles = type === 'daily' ? DAILY_TITLES : WEEKLY_TITLES;
+    const currentStreak = type === 'daily' ? state.dailyStreak : state.weeklyStreak;
+
+    titles.forEach(title => {
+        const item = document.createElement('div');
+        item.className = 'title-item';
+        
+        const unlocked = currentStreak >= title.requirement;
+        if (!unlocked) {
+            item.classList.add('locked');
+        } else {
+            // Add tier class for hover effects
+            item.classList.add(title.tier);
+        }
+
+        const isSelected = state.selectedTitle && 
+                          state.selectedTitle.id === title.id && 
+                          state.selectedTitle.type === type;
+        if (isSelected) {
+            item.classList.add('selected');
+        }
+
+        const prefix = type === 'daily' ? '[D]' : '[W]';
+        
+        item.innerHTML = `
+            <div class="title-item-name">
+                <span class="title-tier ${title.tier}">${title.tier}</span>
+                <span>${prefix} ${title.name}</span>
+            </div>
+            <div class="title-requirement">${unlocked ? 'Unlocked!' : `${title.requirement} ${type === 'daily' ? 'days' : 'weeks'} needed`}</div>
+        `;
+
+        if (unlocked) {
+            item.addEventListener('click', () => selectTitle(title, type));
+        }
+
+        titleList.appendChild(item);
+    });
+}
+
+function selectTitle(title, type) {
+    state.selectedTitle = { ...title, type };
+    saveState();
+    updateTitleDisplay();
+    renderTitles(type);
+}
+
+function updateTitleDisplay() {
+    const titleDisplay = document.getElementById('currentTitle');
+    
+    if (!state.selectedTitle) {
+        titleDisplay.innerHTML = `
+            <span class="title-badge no-title">No Title Selected</span>
+            <button class="change-title-btn" id="changeTitleBtn">Change Title</button>
+        `;
+    } else {
+        const prefix = state.selectedTitle.type === 'daily' ? '[D]' : '[W]';
+        const tierClass = state.selectedTitle.tier;
+        titleDisplay.innerHTML = `
+            <span class="title-badge ${tierClass}">${prefix} ${state.selectedTitle.name}</span>
+            <button class="change-title-btn" id="changeTitleBtn">Change Title</button>
+        `;
+    }
+
+    // Re-attach event listener
+    document.getElementById('changeTitleBtn').addEventListener('click', () => openTitleModal());
+}
+
+function checkMilestones() {
+    const milestones = [
+        { streak: 7, type: 'daily', message: '🔥 7 Day Streak! You\'re building momentum!' },
+        { streak: 30, type: 'daily', message: '🎉 30 Day Streak! One month strong!' },
+        { streak: 100, type: 'daily', message: '💎 100 Day Streak! You\'re a legend!' },
+        { streak: 365, type: 'daily', message: '⭐ ONE YEAR STREAK! Incredible dedication!' },
+        { streak: 4, type: 'weekly', message: '🎨 1 Month Weekly Streak! Great consistency!' },
+        { streak: 52, type: 'weekly', message: '🏆 ONE YEAR Weekly Streak! Amazing commitment!' }
+    ];
+
+    milestones.forEach(milestone => {
+        const streak = milestone.type === 'daily' ? state.dailyStreak : state.weeklyStreak;
+        if (streak === milestone.streak) {
+            showMilestone(milestone.message);
+        }
+    });
+}
+
+function showMilestone(message) {
+    const notif = document.getElementById('milestoneNotif');
+    notif.querySelector('.milestone-text').textContent = message;
+    notif.classList.add('show');
+
+    setTimeout(() => {
+        notif.classList.remove('show');
+    }, 5000);
+}
+
+function showUploadInfo(message, type) {
+    const info = document.getElementById('uploadInfo');
+    info.textContent = message;
+    info.className = `upload-info ${type}`;
+
+    setTimeout(() => {
+        info.textContent = '';
+        info.className = 'upload-info';
+    }, 3000);
+}
+
+function saveState() {
+    localStorage.setItem('artistStreakState', JSON.stringify(state));
+}
+
+function loadState() {
+    const saved = localStorage.getItem('artistStreakState');
+    if (saved) {
+        const loaded = JSON.parse(saved);
+        state = { ...state, ...loaded };
+        
+        // Convert date strings back to Date objects
+        if (state.currentMonthView) {
+            state.currentMonthView = new Date(state.currentMonthView);
+        } else {
+            state.currentMonthView = new Date();
+        }
+        
+        if (!state.currentYearView) {
+            state.currentYearView = new Date().getFullYear();
+        }
     }
 }
