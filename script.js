@@ -675,7 +675,7 @@ function renderTitles(type) {
                 <span class="title-tier ${title.tier}">${title.tier}</span>
                 <span>${prefix} ${title.name}</span>
             </div>
-            <div class="title-requirement">${unlocked ? 'Unlocked!' : `${title.requirement} ${type === 'daily' ? 'days' : 'weeks'} needed`}</div>
+            <div class="title-requirement">${unlocked ? 'Unlocked!' : `${title.requirement} ${type === 'daily streak' ? 'days' : 'weekly streak'} needed`}</div>
         `;
 
         if (unlocked) {
