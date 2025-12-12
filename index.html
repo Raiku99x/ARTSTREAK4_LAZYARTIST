@@ -55,7 +55,7 @@
                     <div class="timer" id="weeklyTimer">--:--:--</div>
                 </div>
                 <div class="upload-count">
-                    This Week: <span id="weeklyUploadCount">0</span>/7 uploads
+                    This Week: <span id="weeklyUploadCount">0</span>/21 uploads
                 </div>
             </div>
         </div>
@@ -73,8 +73,30 @@
 
         <!-- Calendar Heat Map -->
         <div class="calendar-section">
-            <h3>📊 Upload Calendar</h3>
-            <div class="calendar-grid" id="calendarGrid"></div>
+            <div class="calendar-tabs">
+                <button class="calendar-tab-btn active" data-calendar="daily">📅 Monthly Calendar</button>
+                <button class="calendar-tab-btn" data-calendar="weekly">📊 Yearly Calendar</button>
+            </div>
+            <div class="calendar-view" id="dailyCalendarView">
+                <div class="calendar-controls">
+                    <button class="calendar-nav-btn" id="prevMonth">◀</button>
+                    <h4 id="dailyCalendarTitle">December 2025</h4>
+                    <button class="calendar-nav-btn" id="nextMonth">▶</button>
+                </div>
+                <div class="calendar-grid-wrapper">
+                    <div class="calendar-grid" id="dailyCalendarGrid"></div>
+                </div>
+            </div>
+            <div class="calendar-view hidden" id="weeklyCalendarView">
+                <div class="calendar-controls">
+                    <button class="calendar-nav-btn" id="prevYear">◀</button>
+                    <h4 id="weeklyCalendarTitle">2025</h4>
+                    <button class="calendar-nav-btn" id="nextYear">▶</button>
+                </div>
+                <div class="calendar-grid-wrapper">
+                    <div class="calendar-grid" id="weeklyCalendarGrid"></div>
+                </div>
+            </div>
         </div>
 
         <!-- Gallery -->
