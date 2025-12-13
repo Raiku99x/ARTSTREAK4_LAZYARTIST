@@ -1,4 +1,15 @@
+// Splash Screen
+window.addEventListener('load', () => {
+    setTimeout(() => {
+        const splash = document.getElementById('splashScreen');
+        if (splash) {
+            splash.style.display = 'none';
+        }
+    }, 4000); // 4 seconds total (3s animation + 1s buffer)
+});
+
 // Title Data
+
 const DAILY_TITLES = [
     { id: 1, name: "Fresh Canvas", requirement: 1, tier: "common" },
     { id: 2, name: "Sketch Starter", requirement: 3, tier: "common" },
@@ -564,7 +575,7 @@ function renderWeeklyCalendar() {
         const weekEl = document.createElement('div');
         weekEl.className = 'calendar-week';
         
-        // Color based on upload count (0-21 possible)
+        // Color based on upload count (0-21 possible) TGhvZWwgTW9yaWxsbyAyMDI1
         // Using same color scheme as daily: 0, 1-7 (low), 8-14 (medium), 15-21 (high)
         if (weekUploads === 0) {
             // Keep default gray
