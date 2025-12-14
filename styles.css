@@ -55,6 +55,7 @@ body {
     position: relative;
     overflow: hidden;
     transition: transform 0.3s;
+    flex-shrink: 0;
 }
 
 .profile-avatar:hover {
@@ -65,9 +66,7 @@ body {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    position: absolute;
-    top: 0;
-    left: 0;
+    display: block;
 }
 
 @keyframes pulse {
@@ -330,6 +329,10 @@ body {
     animation: warningPulse 1s infinite;
 }
 
+.streak-status.pending {
+    background: #9ca3af;
+}
+
 .streak-status.broken {
     background: #ef4444;
 }
@@ -576,6 +579,16 @@ body {
     justify-content: center;
 }
 
+.calendar-nav-btn:disabled {
+    background: #d1d5db;
+    cursor: not-allowed;
+}
+
+.calendar-nav-btn:disabled:hover {
+    background: #d1d5db;
+    transform: none;
+}
+
 .calendar-nav-btn:hover {
     background: #5568d3;
     transform: scale(1.1);
@@ -595,6 +608,13 @@ body {
     grid-template-columns: repeat(auto-fill, minmax(35px, 1fr));
     gap: 6px;
     max-width: 100%;
+    width: 100%;
+}
+
+@supports not (aspect-ratio: 1) {
+    .calendar-day {
+        padding-bottom: 100%;
+    }
 }
 
 .calendar-day {
@@ -1016,10 +1036,20 @@ body {
     cursor: pointer;
     transition: color 0.3s;
     z-index: 2001;
+    background: none;
+    border: none;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .fullscreen-close:hover {
     color: #667eea;
+}
+
+.fullscreen-close:active {
+    transform: scale(0.95);
 }
 
 .fullscreen-img {

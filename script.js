@@ -70,18 +70,21 @@ let state = {
     dailyUploadsToday: 0,
     weeklyUploadsThisWeek: 0,
     currentMonthView: new Date(),
-    currentYearView: new Date().getFullYear()
+    currentYearView: new Date().getFullYear(),
+    milestonesShown: [] // FIX #7: Track shown milestones
 };
 
 // Initialize
 document.addEventListener('DOMContentLoaded', () => {
     loadState();
     initializeElements();
+    checkStreaks(); // FIX #5: Call before updateUI to ensure proper reset
     updateUI();
     startTimers();
     renderDailyCalendar();
     renderWeeklyCalendar();
     renderGallery();
+    checkMilestonesOnLoad(); // FIX #7: Check milestones on page load
 });
 
 function initializeElements() {
@@ -104,7 +107,12 @@ function initializeElements() {
         state.username = e.target.value || "Artist";
         saveState();
     });
-    fullscreenClose.addEventListener('click', () => fullscreenModal.classList.remove('active'));
+    
+    // FIX #8: Better fullscreen modal handling
+    fullscreenClose.addEventListener('click', (e) => {
+        e.stopPropagation();
+        fullscreenModal.classList.remove('active');
+    });
     fullscreenModal.addEventListener('click', (e) => {
         if (e.target === fullscreenModal) {
             fullscreenModal.classList.remove('active');
@@ -121,6 +129,9 @@ function initializeElements() {
             document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
             renderTitles(btn.dataset.tab);
+            // FIX #6: Scroll to top and manage focus
+            document.getElementById('titleList').scrollTop = 0;
+            document.getElementById('titleList').focus();
         });
     });
 
@@ -136,7 +147,7 @@ function initializeElements() {
         });
     });
 
-    // Calendar navigation
+    // Calendar navigation - FIX #1: Better logic and feedback
     document.getElementById('prevMonth').addEventListener('click', () => {
         state.currentMonthView.setMonth(state.currentMonthView.getMonth() - 1);
         renderDailyCalendar();
@@ -145,14 +156,18 @@ function initializeElements() {
 
     document.getElementById('nextMonth').addEventListener('click', () => {
         const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        
         const nextMonth = new Date(state.currentMonthView);
         nextMonth.setMonth(nextMonth.getMonth() + 1);
+        nextMonth.setDate(1); // Go to first day of next month
         
-        // Don't allow going beyond current month
         if (nextMonth <= today) {
             state.currentMonthView = nextMonth;
             renderDailyCalendar();
             saveState();
+        } else {
+            showUploadInfo("Can't view future months", 'error');
         }
     });
 
@@ -165,11 +180,12 @@ function initializeElements() {
     document.getElementById('nextYear').addEventListener('click', () => {
         const currentYear = new Date().getFullYear();
         
-        // Don't allow going beyond current year
         if (state.currentYearView < currentYear) {
             state.currentYearView++;
             renderWeeklyCalendar();
             saveState();
+        } else {
+            showUploadInfo("Can't view future years", 'error');
         }
     });
 
@@ -181,6 +197,7 @@ function initializeElements() {
     }
 }
 
+// FIX #3: Better file input reset and consecutive upload handling
 function handleFileUpload(e) {
     const file = e.target.files[0];
     if (!file) return;
@@ -188,6 +205,10 @@ function handleFileUpload(e) {
     // Check daily upload limit (max 3 per day)
     if (state.dailyUploadsToday >= 3) {
         showUploadInfo("You've reached the daily upload limit (3 uploads)", 'error');
+        // Clear input to allow re-upload
+        setTimeout(() => {
+            e.target.value = '';
+        }, 0);
         return;
     }
 
@@ -195,7 +216,7 @@ function handleFileUpload(e) {
     reader.onload = (event) => {
         const now = new Date();
         const upload = {
-            id: Date.now(),
+            id: Date.now() + Math.random(), // Ensure unique ID even for same file
             image: event.target.result,
             timestamp: now.toISOString(),
             date: now.toDateString()
@@ -228,10 +249,20 @@ function handleFileUpload(e) {
         
         checkMilestones();
     };
+    
+    reader.onerror = () => {
+        showUploadInfo("Error reading file", 'error');
+    };
+    
     reader.readAsDataURL(file);
-    e.target.value = '';
+    
+    // Clear input after a brief delay to allow consecutive uploads
+    setTimeout(() => {
+        e.target.value = '';
+    }, 100);
 }
 
+// FIX #2: Better avatar upload handling
 function handleAvatarUpload(e) {
     const file = e.target.files[0];
     if (!file) return;
@@ -241,7 +272,13 @@ function handleAvatarUpload(e) {
         state.avatarImage = event.target.result;
         saveState();
         updateAvatarDisplay();
+        showUploadInfo("✅ Profile picture updated!", 'success');
     };
+    
+    reader.onerror = () => {
+        showUploadInfo("Error uploading profile picture", 'error');
+    };
+    
     reader.readAsDataURL(file);
     e.target.value = '';
 }
@@ -249,9 +286,14 @@ function handleAvatarUpload(e) {
 function updateAvatarDisplay() {
     const profileAvatar = document.getElementById('profileAvatar');
     if (state.avatarImage) {
-        profileAvatar.innerHTML = `<img src="${state.avatarImage}" alt="Profile">`;
+        // FIX #2: Clear content and add img properly
+        profileAvatar.innerHTML = '';
+        const img = document.createElement('img');
+        img.src = state.avatarImage;
+        img.alt = 'Profile';
+        profileAvatar.appendChild(img);
     } else {
-        profileAvatar.innerHTML = '🎨';
+        profileAvatar.textContent = '🎨';
     }
 }
 
@@ -286,34 +328,37 @@ function updateDailyStreak() {
     }
 }
 
+// FIX #4: Improved weekly streak logic with better week boundary handling
 function updateWeeklyStreak() {
     const now = new Date();
+    const currentWeekStart = getWeekStart(now);
     
     if (!state.currentWeekStart) {
-        state.currentWeekStart = getWeekStart(now).toISOString();
+        // First week
+        state.currentWeekStart = currentWeekStart.toISOString();
         state.weeklyStreak = 1;
     } else {
-        const currentWeekStart = getWeekStart(now);
         const savedWeekStart = new Date(state.currentWeekStart);
         
         if (currentWeekStart.getTime() === savedWeekStart.getTime()) {
-            // Same week
+            // Same week - already counted
             return;
-        } else {
-            // Check if it's the next week
-            const nextWeek = new Date(savedWeekStart);
-            nextWeek.setDate(nextWeek.getDate() + 7);
-            
-            if (currentWeekStart.getTime() === nextWeek.getTime()) {
-                // Consecutive week
-                state.weeklyStreak++;
-            } else {
-                // Streak broken
-                state.weeklyStreak = 1;
-            }
-            
-            state.currentWeekStart = currentWeekStart.toISOString();
         }
+        
+        // Check if it's the next consecutive week
+        const nextWeek = new Date(savedWeekStart);
+        nextWeek.setDate(nextWeek.getDate() + 7);
+        
+        if (currentWeekStart.getTime() === nextWeek.getTime()) {
+            // Consecutive week
+            state.weeklyStreak++;
+        } else {
+            // Streak broken - reset to 1
+            state.weeklyStreak = 1;
+        }
+        
+        // Update week start
+        state.currentWeekStart = currentWeekStart.toISOString();
     }
 
     state.lastWeeklyUpload = now.toISOString();
@@ -325,21 +370,34 @@ function updateWeeklyStreak() {
 function getWeekStart(date) {
     const d = new Date(date);
     const day = d.getDay();
-    const diff = d.getDate() - day;
+    const diff = d.getDate() - day; // Sunday = 0
     return new Date(d.setDate(diff));
 }
 
+// FIX #5: Separate and improve checkStreaks logic
 function checkStreaks() {
     const now = new Date();
     
-    // Check daily streak
+    // Reset daily upload count if new day
+    const today = now.toDateString();
+    const lastUploadDate = state.lastDailyUpload ? new Date(state.lastDailyUpload).toDateString() : null;
+    if (lastUploadDate !== today && state.lastDailyUpload) {
+        state.dailyUploadsToday = 0;
+    }
+
+    // Reset weekly upload count if new week
+    const currentWeekStart = getWeekStart(now);
+    if (state.currentWeekStart && new Date(state.currentWeekStart).getTime() !== currentWeekStart.getTime()) {
+        state.weeklyUploadsThisWeek = 0;
+    }
+
+    // Check daily streak validity
     if (state.lastDailyUpload) {
         const lastUpload = new Date(state.lastDailyUpload);
         const lastDate = lastUpload.toDateString();
         const yesterday = new Date(now);
         yesterday.setDate(yesterday.getDate() - 1);
         const yesterdayStr = yesterday.toDateString();
-        const today = now.toDateString();
 
         if (lastDate !== today && lastDate !== yesterdayStr) {
             // Streak broken
@@ -347,43 +405,25 @@ function checkStreaks() {
         }
     }
 
-    // Check weekly streak
+    // Check weekly streak validity
     if (state.currentWeekStart) {
-        const currentWeekStart = getWeekStart(now);
         const savedWeekStart = new Date(state.currentWeekStart);
+        const weekBeforeLast = new Date(currentWeekStart);
+        weekBeforeLast.setDate(weekBeforeLast.getDate() - 7);
         
         if (currentWeekStart.getTime() !== savedWeekStart.getTime()) {
-            // New week started
-            const lastWeek = new Date(currentWeekStart);
-            lastWeek.setDate(lastWeek.getDate() - 7);
-            
-            if (!state.lastWeeklyUpload || new Date(state.lastWeeklyUpload) < lastWeek) {
+            // We're in a new week
+            if (!state.lastWeeklyUpload || new Date(state.lastWeeklyUpload) <= weekBeforeLast) {
                 // Missed last week
                 state.weeklyStreak = 0;
-                state.currentWeekStart = currentWeekStart.toISOString();
             }
         }
-    }
-
-    // Reset daily upload count if new day
-    const today = now.toDateString();
-    const lastUploadDate = state.lastDailyUpload ? new Date(state.lastDailyUpload).toDateString() : null;
-    if (lastUploadDate !== today) {
-        state.dailyUploadsToday = 0;
-    }
-
-    // Reset weekly upload count if new week
-    const currentWeekStart = getWeekStart(now);
-    if (!state.currentWeekStart || new Date(state.currentWeekStart).getTime() !== currentWeekStart.getTime()) {
-        state.weeklyUploadsThisWeek = 0;
     }
 
     saveState();
 }
 
 function updateUI() {
-    checkStreaks();
-
     // Update streak numbers
     document.getElementById('dailyStreak').textContent = state.dailyStreak;
     document.getElementById('weeklyStreak').textContent = state.weeklyStreak;
@@ -414,7 +454,7 @@ function updateStreakStatus() {
         dailyStatus.className = 'streak-status at-risk';
     } else {
         dailyStatus.textContent = 'Pending';
-        dailyStatus.className = 'streak-status at-risk';
+        dailyStatus.className = 'streak-status pending';
     }
 
     // Weekly status
@@ -426,7 +466,7 @@ function updateStreakStatus() {
         weeklyStatus.className = 'streak-status at-risk';
     } else {
         weeklyStatus.textContent = 'Pending';
-        weeklyStatus.className = 'streak-status at-risk';
+        weeklyStatus.className = 'streak-status pending';
     }
 }
 
@@ -492,6 +532,7 @@ function formatWeeklyTime(ms) {
     return `${days}:${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
 }
 
+// FIX #9: Better calendar rendering for mobile
 function renderDailyCalendar() {
     const calendarGrid = document.getElementById('dailyCalendarGrid');
     const titleEl = document.getElementById('dailyCalendarTitle');
@@ -523,6 +564,7 @@ function renderDailyCalendar() {
         
         const dayEl = document.createElement('div');
         dayEl.className = 'calendar-day';
+        dayEl.setAttribute('data-date', dateStr);
         
         if (dayUploads > 0) {
             dayEl.classList.add(`has-upload-${Math.min(dayUploads, 3)}`);
@@ -548,7 +590,7 @@ function renderWeeklyCalendar() {
     // Get first day of the year
     const yearStart = new Date(year, 0, 1);
     
-    // Find the first Sunday of the year (or the Sunday before if year doesn't start on Sunday)
+    // Find the first Sunday of the year
     const firstSunday = new Date(yearStart);
     const dayOfWeek = yearStart.getDay();
     if (dayOfWeek !== 0) {
@@ -558,13 +600,18 @@ function renderWeeklyCalendar() {
     const today = new Date();
     const currentWeekStart = getWeekStart(today);
 
-    // Render 52 weeks
-    for (let weekNum = 0; weekNum < 52; weekNum++) {
+    // Render 52-53 weeks
+    for (let weekNum = 0; weekNum < 53; weekNum++) {
         const weekStart = new Date(firstSunday);
         weekStart.setDate(firstSunday.getDate() + (weekNum * 7));
         
         const weekEnd = new Date(weekStart);
         weekEnd.setDate(weekStart.getDate() + 6);
+
+        // Only show weeks that overlap with the selected year
+        if (weekEnd.getFullYear() < year || weekStart.getFullYear() > year) {
+            continue;
+        }
 
         // Count uploads in this week
         const weekUploads = state.uploads.filter(upload => {
@@ -574,9 +621,9 @@ function renderWeeklyCalendar() {
 
         const weekEl = document.createElement('div');
         weekEl.className = 'calendar-week';
+        weekEl.setAttribute('data-week', weekNum + 1);
         
-        // Color based on upload count (0-21 possible) TGhvZWwgTW9yaWxsbyAyMDI1
-        // Using same color scheme as daily: 0, 1-7 (low), 8-14 (medium), 15-21 (high)
+        // Color based on upload count (0-21 possible)
         if (weekUploads === 0) {
             // Keep default gray
         } else if (weekUploads <= 7) {
@@ -616,6 +663,7 @@ function renderGallery() {
     state.uploads.forEach(upload => {
         const item = document.createElement('div');
         item.className = 'gallery-item';
+        item.setAttribute('data-id', upload.id);
         
         const img = document.createElement('img');
         img.src = upload.image;
@@ -651,6 +699,10 @@ function openTitleModal() {
     const modal = document.getElementById('titleModal');
     modal.classList.add('active');
     renderTitles('daily');
+    // FIX #6: Set focus for accessibility
+    setTimeout(() => {
+        document.querySelector('.tab-btn.active').focus();
+    }, 100);
 }
 
 function renderTitles(type) {
@@ -663,13 +715,15 @@ function renderTitles(type) {
     titles.forEach(title => {
         const item = document.createElement('div');
         item.className = 'title-item';
+        item.setAttribute('role', 'option'); // FIX #6: Accessibility
         
         const unlocked = currentStreak >= title.requirement;
         if (!unlocked) {
             item.classList.add('locked');
+            item.setAttribute('aria-disabled', 'true');
         } else {
-            // Add tier class for hover effects
             item.classList.add(title.tier);
+            item.setAttribute('aria-disabled', 'false');
         }
 
         const isSelected = state.selectedTitle && 
@@ -677,6 +731,7 @@ function renderTitles(type) {
                           state.selectedTitle.type === type;
         if (isSelected) {
             item.classList.add('selected');
+            item.setAttribute('aria-selected', 'true');
         }
 
         const prefix = type === 'daily' ? '[D]' : '[W]';
@@ -686,11 +741,16 @@ function renderTitles(type) {
                 <span class="title-tier ${title.tier}">${title.tier}</span>
                 <span>${prefix} ${title.name}</span>
             </div>
-            <div class="title-requirement">${unlocked ? 'Unlocked!' : `${title.requirement} ${type === 'streak' ? 'days' : 'streak'} needed`}</div>
+            <div class="title-requirement">${unlocked ? 'Unlocked!' : `${title.requirement} ${type === 'daily' ? 'days' : 'weeks'} needed`}</div>
         `;
 
         if (unlocked) {
             item.addEventListener('click', () => selectTitle(title, type));
+            item.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    selectTitle(title, type);
+                }
+            });
         }
 
         titleList.appendChild(item);
@@ -725,6 +785,29 @@ function updateTitleDisplay() {
     document.getElementById('changeTitleBtn').addEventListener('click', () => openTitleModal());
 }
 
+// FIX #7: Check milestones on page load and prevent duplicates
+function checkMilestonesOnLoad() {
+    const milestones = [
+        { streak: 7, type: 'daily', message: '🔥 7 Day Streak! You\'re building momentum!' },
+        { streak: 30, type: 'daily', message: '🎉 30 Day Streak! One month strong!' },
+        { streak: 100, type: 'daily', message: '💎 100 Day Streak! You\'re a legend!' },
+        { streak: 365, type: 'daily', message: '⭐ ONE YEAR STREAK! Incredible dedication!' },
+        { streak: 4, type: 'weekly', message: '🎨 1 Month Weekly Streak! Great consistency!' },
+        { streak: 52, type: 'weekly', message: '🏆 ONE YEAR Weekly Streak! Amazing commitment!' }
+    ];
+
+    milestones.forEach(milestone => {
+        const streak = milestone.type === 'daily' ? state.dailyStreak : state.weeklyStreak;
+        const milestoneKey = `${milestone.type}-${milestone.streak}`;
+        
+        if (streak === milestone.streak && !state.milestonesShown.includes(milestoneKey)) {
+            showMilestone(milestone.message);
+            state.milestonesShown.push(milestoneKey);
+            saveState();
+        }
+    });
+}
+
 function checkMilestones() {
     const milestones = [
         { streak: 7, type: 'daily', message: '🔥 7 Day Streak! You\'re building momentum!' },
@@ -737,8 +820,12 @@ function checkMilestones() {
 
     milestones.forEach(milestone => {
         const streak = milestone.type === 'daily' ? state.dailyStreak : state.weeklyStreak;
-        if (streak === milestone.streak) {
+        const milestoneKey = `${milestone.type}-${milestone.streak}`;
+        
+        if (streak === milestone.streak && !state.milestonesShown.includes(milestoneKey)) {
             showMilestone(milestone.message);
+            state.milestonesShown.push(milestoneKey);
+            saveState();
         }
     });
 }
@@ -783,6 +870,11 @@ function loadState() {
         
         if (!state.currentYearView) {
             state.currentYearView = new Date().getFullYear();
+        }
+
+        // FIX #7: Ensure milestonesShown exists
+        if (!state.milestonesShown) {
+            state.milestonesShown = [];
         }
     }
 }

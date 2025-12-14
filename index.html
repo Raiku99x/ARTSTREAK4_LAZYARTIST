@@ -21,10 +21,8 @@
                 <div class="splash-dot"></div>
             </div>
         </div>
-    </div>
+   </div>
 
-    <div class="container">
-        <!-- Rest of your existing code... -->
     <div class="container">
         <!-- Profile Section -->
         <div class="profile-section">
@@ -81,8 +79,8 @@
         <!-- Upload Section -->
         <div class="upload-section">
             <h3>📤 Upload Your Art</h3>
-            <input type="file" id="fileInput" accept="image/*" style="display: none;">
-            <button class="upload-btn" id="uploadBtn">
+            <input type="file" id="fileInput" accept="image/*" style="display: none;" data-upload="image">
+            <button class="upload-btn" id="uploadBtn" aria-label="Upload artwork">
                 <span class="btn-icon">🎨</span>
                 <span class="btn-text">Choose Image</span>
             </button>
@@ -91,18 +89,18 @@
 
         <!-- Calendar Heat Map -->
         <div class="calendar-section">
-            <div class="calendar-tabs">
-                <button class="calendar-tab-btn active" data-calendar="daily">📅 Monthly Calendar</button>
-                <button class="calendar-tab-btn" data-calendar="weekly">📊 Yearly Calendar</button>
-            </div>
+            <div class="calendar-tabs" role="tablist">
+                <button class="calendar-tab-btn active" data-calendar="daily" role="tab" aria-selected="true">📅 Monthly Calendar</button>
+                <button class="calendar-tab-btn" data-calendar="weekly" role="tab" aria-selected="false">📊 Yearly Calendar</button>
+                </div>
             <div class="calendar-view" id="dailyCalendarView">
                 <div class="calendar-controls">
                     <button class="calendar-nav-btn" id="prevMonth">◀</button>
                     <h4 id="dailyCalendarTitle">December 2025</h4>
                     <button class="calendar-nav-btn" id="nextMonth">▶</button>
                 </div>
-                <div class="calendar-grid-wrapper">
-                    <div class="calendar-grid" id="dailyCalendarGrid"></div>
+                <div class="calendar-grid-wrapper" role="presentation">
+                    <div class="calendar-grid" id="dailyCalendarGrid" role="grid"></div>
                 </div>
             </div>
             <div class="calendar-view hidden" id="weeklyCalendarView">
@@ -127,11 +125,11 @@
         </div>
 
         <!-- Title Selection Modal -->
-        <div class="modal" id="titleModal">
+        <div class="modal" id="titleModal" role="dialog" aria-labelledby="titleModalLabel">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h2>🏆 Select Your Title</h2>
-                    <button class="close-btn" id="closeModal">&times;</button>
+                    <h2 id="titleModalLabel">🏆 Select Your Title</h2>
+                    <button class="close-btn" id="closeModal" aria-label="Close modal">&times;</button>
                 </div>
                 <div class="title-tabs">
                     <button class="tab-btn active" data-tab="daily">Daily Titles</button>
@@ -142,9 +140,9 @@
         </div>
 
         <!-- Fullscreen Image Modal -->
-        <div class="fullscreen-modal" id="fullscreenModal">
-            <span class="fullscreen-close" id="fullscreenClose">&times;</span>
-            <img class="fullscreen-img" id="fullscreenImg" src="" alt="Fullscreen Art">
+        <div class="fullscreen-modal" id="fullscreenModal" role="dialog" aria-label="Fullscreen image view">
+            <button class="fullscreen-close" id="fullscreenClose" aria-label="Close fullscreen">&times;</button>
+            <img class="fullscreen-img" id="fullscreenImg" src="" alt="Fullscreen artwork">
             <div class="fullscreen-info" id="fullscreenInfo"></div>
         </div>
 
