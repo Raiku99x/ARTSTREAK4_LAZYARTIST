@@ -47,5 +47,6 @@ This app stores everything locally using the browser's localStorage API. Your da
 
 ---
 
-*Created with ❤️ by John Lhoel Morillo*  
+*Created by John Lhoel Morillo*  
+
 *BSCS Student | Camarines Sur Polytechnic Colleges*
